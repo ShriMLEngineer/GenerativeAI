@@ -1,5 +1,17 @@
+# Few-shot learning is an impressive skill that enables LLMs (large language models) to learn and make generalizations
+# from a small number of examples. In this context, prompts play a vital role as they provide input to these models, 
+# facilitating this capability.
+
+#This strategy employs the FewShotPromptTemplate class, which requires a PromptTemplate and a collection of a few 
+# example shots. The class arranges the prompt template using these examples, which enhances the language model's 
+# ability to create a more accurate response. To simplify this procedure, we can utilize LangChain's 
+# FewShotPromptTemplate to organize this method effectively.
+
 from langchain import PromptTemplate
 from langchain import FewShotPromptTemplate
+
+OpenAI_api_key = 'sk-'
+# OpenAI_api_key = os.getenv('OPENAI_API_KEY')
 
 # create our examples
 examples = [
@@ -13,13 +25,14 @@ examples = [
     }
 ]
 
-# create an example template
+# Let's create an example template
 example_template = """
 User: {query}
 AI: {answer}
 """
 
-# create a prompt example from above template
+# create a prompt example from above template. We are making use of 2 parametere input_variable and template
+# to pass values 
 example_prompt = PromptTemplate(
     input_variables=["query", "answer"],
     template=example_template
@@ -52,10 +65,10 @@ few_shot_prompt_template = FewShotPromptTemplate(
 from langchain.chat_models import ChatOpenAI
 from langchain import LLMChain
 
-chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.0)
+chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2, openai_api_key=OpenAI_api_key)
 chain = LLMChain(llm=chat, prompt=few_shot_prompt_template)
-chain.run("What's meaning of life in heaven")
+output = chain.run("What's meaning of Large Language Models in heaven")
 #to print output on console
-print(chain.run("What's meaning of life in heaven"))
+print(output)
 
-#Sample Output: "In heaven, the meaning of life is probably just to enjoy an endless supply of fluffy clouds and angelic harp music."
+#Sample Output: "Well, in heaven, Large Language Models are probably busy solving the mysteries of the universe or having deep philosophical discussions with the angels. But hey, that's just my imagination running wild!"
